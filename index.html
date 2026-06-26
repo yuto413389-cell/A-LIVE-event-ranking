@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="600">
+    <title>A-LIVE イベントランキング</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #0f0f2e 0%, #1a1a4e 100%);
+            color: white;
+            font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { font-size: 2em; color: #c8a8ff; margin-bottom: 8px; }
+        .updated { color: #aaa; font-size: 0.9em; }
+        .rankings {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .league { width: 100%; }
+        .league h2 {
+            font-size: 1.3em;
+            color: #e0c0ff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .league img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(150, 100, 255, 0.3);
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #555;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏆 A-LIVE イベントランキング</h1>
+        <p class="updated" id="updated">読み込み中...</p>
+    </header>
+    <div class="rankings">
+        <div class="league"><h2>超上級</h2><img id="img5" src="ranking_5.png" alt="超上級"></div>
+        <div class="league"><h2>上級</h2><img id="img4" src="ranking_4.png" alt="上級"></div>
+        <div class="league"><h2>中級</h2><img id="img3" src="ranking_3.png" alt="中級"></div>
+        <div class="league"><h2>初級</h2><img id="img2" src="ranking_2.png" alt="初級"></div>
+        <div class="league"><h2>超初級</h2><img id="img1" src="ranking_1.png" alt="超初級"></div>
+    </div>
+    <footer><p>10分毎に自動更新 | A-LIVE</p></footer>
+    <script>
+        fetch('updated.json?t=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('updated').textContent = '最終更新: ' + data.time;
+                const t = data.timestamp;
+                for (let i = 1; i <= 5; i++) {
+                    const img = document.getElementById('img' + i);
+                    img.src = 'ranking_' + i + '.png?t=' + t;
+                }
+            })
+            .catch(() => {
+                document.getElementById('updated').textContent = '更新時刻を取得中...';
+            });
+    </script>
+</body>
+</html>
